@@ -1,18 +1,7 @@
 const serverless = require('serverless-http');
 const express = require('express');
-const session = require('express-session');
-const path = require('path');
-
-// Import your existing app logic
-const multiPlayerModeHandler = require('../lib/mode-controllers/multiplayer');
-const singlePlayerModeHandler = require('../lib/mode-controllers/singleplayer');
-const { singlePlayerWelcomeMsg, serverErrorMsg } = require('../lib/messages');
-const {
-  sendMessage,
-  saveUserSession,
-  broadcastMessage,
-  sessionConfig
-} = require('../lib/utils');
+const twilio = require('twilio');
+const MessagingResponse = twilio.twiml.MessagingResponse;
 
 // Create Express app
 const app = express();
@@ -21,87 +10,33 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Add raw body parsing for Twilio signature validation
-app.use((req, res, next) => {
-  let data = '';
-  req.on('data', chunk => {
-    data += chunk;
-  });
-  req.on('end', () => {
-    req.rawBody = data;
-    next();
-  });
-});
-
-// Session middleware with modified cookie settings for serverless
-const netlifySessionConfig = {
-  ...sessionConfig,
-  cookie: {
-    ...sessionConfig.cookie,
-    // Ensure cookies work in serverless environment
-    sameSite: 'none'
-  }
-};
-
-// Session middleware
-app.use(session(netlifySessionConfig));
-
-// Custom properties attached on each request & response
-app.use((req, res, next) => {
-  req.user = req.session.user;
-  res.sendMessage = sendMessage(res);
-  req.saveUserSession = saveUserSession(req);
-  req.broadcastMessage = broadcastMessage(req);
-  next();
-});
-
-// Simple debug endpoint
+// Simple GET endpoint for testing
 app.get('/', (req, res) => {
   console.log('GET request received');
-  res.send('SMS Gaming Platform is running!');
+  res.status(200).send('SMS Gaming Platform is running!');
 });
 
-// The main endpoint where messages arrive
-app.post('/', async (req, res) => {
-  console.log('POST webhook received:', JSON.stringify(req.body));
+// Simple POST endpoint that just echoes back the message
+app.post('/', (req, res) => {
+  console.log('POST request received:', req.body);
   
-  // Simple direct response for debugging
-  if (req.body && req.body.Body) {
-    const twiml = new (require('twilio').twiml.MessagingResponse)();
-    twiml.message(`You said: ${req.body.Body}. This is a test response.`);
-    
-    console.log('Sending response:', twiml.toString());
-    
-    res.writeHead(200, { 'Content-Type': 'text/xml' });
-    return res.end(twiml.toString());
-  }
-  
-  // If we reach here, try the normal flow
   try {
-    const user = req.session.user || {};
+    const twiml = new MessagingResponse();
     
-    if (user.mode === 'single-player') {
-      singlePlayerModeHandler(req, res);
-    } else if (user.mode === 'multi-player') {
-      multiPlayerModeHandler(req, res);
-    } else {
-      const userSession = {
-        phone: req.body.From,
-        mode: 'single-player'
-      };
-
-      await req.saveUserSession(userSession);
-      res.sendMessage(singlePlayerWelcomeMsg);
-    }
-  } catch (error) {
-    console.error('Error handling message:', error);
+    // Get the incoming message text
+    const incomingMsg = req.body.Body || 'No message provided';
     
-    // Send a simple error response
-    const twiml = new (require('twilio').twiml.MessagingResponse)();
-    twiml.message('Sorry, there was an error processing your request.');
+    // Send a simple response
+    twiml.message(`You said: ${incomingMsg}. This is a test response from Netlify function.`);
     
+    // Set the correct headers and send the response
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
+    
+    console.log('Response sent successfully');
+  } catch (error) {
+    console.error('Error in POST handler:', error);
+    res.status(500).send('Server error');
   }
 });
 

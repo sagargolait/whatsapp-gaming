@@ -7,3 +7,7 @@
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
+  force = true
+
+[functions]
+  node_bundler = "esbuild"
