@@ -4,7 +4,8 @@
   "description": "Gaming platform powered by Twilio SMS.",
   "main": "lib/app.js",
   "scripts": {
-    "start": "nodemon lib/app.js"
+    "start": "nodemon lib/app.js",
+    "build": "npm install"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -19,6 +20,7 @@
     "html-entities": "^2.3.3",
     "moji-translate": "^1.0.8",
     "random-words": "^1.2.1",
+    "serverless-http": "^3.2.0",
     "superb": "^4.0.0",
     "twilio": "^4.7.2",
     "txtgen": "^3.0.4",
