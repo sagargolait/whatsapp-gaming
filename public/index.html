@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Gaming</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="whatsapp-interface">
+            <div class="header">
+                <h1>WhatsApp Gaming</h1>
+                <p>Play games via WhatsApp messages</p>
+            </div>
+            
+            <div class="messaging-section">
+                <div class="send-message-section">
+                    <h2>Send a WhatsApp message</h2>
+                    <p>Use WhatsApp and send a message from your device to</p>
+                    
+                    <div class="phone-number">
+                        <i class="fab fa-whatsapp"></i>
+                        <span id="phone-number">+1 415 523 8886</span>
+                        <button id="copy-btn" title="Copy to clipboard"><i class="fas fa-copy"></i></button>
+                    </div>
+                    
+                    <div class="join-code">
+                        <input type="checkbox" id="join-code-checkbox">
+                        <label for="join-code-checkbox">with code <span class="code-highlight">join bold-chapter</span></label>
+                    </div>
+                    
+                    <a href="#" class="open-whatsapp-btn" id="open-whatsapp">
+                        Open WhatsApp <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+                
+                <div class="qr-section">
+                    <h2>Scan the QR code on mobile</h2>
+                    <div class="qr-code" id="qr-code"></div>
+                    <p class="sandbox-note">Twilio WhatsApp Sandbox</p>
+                </div>
+            </div>
+            
+            <div class="game-preview">
+                <h2>Available Games</h2>
+                <div class="game-cards">
+                    <div class="game-card">
+                        <img src="images/hangman.png" alt="Hangman">
+                        <h3>Hangman</h3>
+                    </div>
+                    <div class="game-card">
+                        <img src="images/trivia.png" alt="Trivia">
+                        <h3>Trivia</h3>
+                    </div>
+                    <div class="game-card">
+                        <img src="images/guess-number.png" alt="Guess Number">
+                        <h3>Guess Number</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h2>Try it out</h2>
+                <div class="chat-demo">
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Messages will be added here by JavaScript -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="message-input" placeholder="Type a message">
+                        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
