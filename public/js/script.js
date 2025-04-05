@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Generate QR code
     const qrCodeContainer = document.getElementById('qr-code');
-    const qrCodeUrl = "https://wa.me/14155238886?text=join%20bold-chapter";
+    const qrCodeUrl = "https://wa.me/14155238886?text=join%20told-chapter";
     
     new QRCode(qrCodeContainer, {
         text: qrCodeUrl,
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let message = '';
         
         if (joinCodeCheckbox.checked) {
-            message = 'join bold-chapter';
+            message = 'join told-chapter';
         }
         
         window.open(`https://wa.me/14155238886?text=${encodeURIComponent(message)}`, '_blank');
